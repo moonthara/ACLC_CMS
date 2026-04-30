@@ -12,7 +12,6 @@ $student = $stmt->fetch();
 
 if (!$student) { session_destroy(); redirect('/aclc_system/index.php'); }
 
-// Stats
 $approved_count = $db->prepare("SELECT COUNT(*) FROM memberships WHERE student_id=? AND status='approved'");
 $approved_count->execute([$student_id]);
 $approved_count = (int)$approved_count->fetchColumn();
@@ -21,28 +20,24 @@ $pending_count = $db->prepare("SELECT COUNT(*) FROM memberships WHERE student_id
 $pending_count->execute([$student_id]);
 $pending_count = (int)$pending_count->fetchColumn();
 
-// Memberships list (up to 4)
 $mem_stmt = $db->prepare("SELECT m.*, c.club_name, c.description FROM memberships m
     JOIN clubs c ON m.club_id=c.id WHERE m.student_id=? ORDER BY m.status='approved' DESC, m.applied_at DESC LIMIT 4");
 $mem_stmt->execute([$student_id]);
 $memberships = $mem_stmt->fetchAll();
 
-// Events (up to 4, filtered by house or global)
 $ev_stmt = $db->prepare("SELECT e.*, c.club_name FROM events e LEFT JOIN clubs c ON e.club_id=c.id
     WHERE (e.house=? OR e.house IS NULL)
     ORDER BY CASE WHEN e.event_date >= CURDATE() THEN 0 ELSE 1 END, ABS(DATEDIFF(e.event_date, CURDATE())) LIMIT 4");
 $ev_stmt->execute([$student['house']]);
 $events = $ev_stmt->fetchAll();
 
-// Total events count
 $ev_total = $db->prepare("SELECT COUNT(*) FROM events WHERE house=? OR house IS NULL");
 $ev_total->execute([$student['house']]);
 $ev_total = (int)$ev_total->fetchColumn();
 
-// House color
-$houseHex  = getHouseColor($student['house']);           // e.g. #1565C0
-$houseTxt  = getHouseColor($student['house'], 'text');   // #ffffff or #333333
-// Derive RGB for CSS variables
+$houseHex  = getHouseColor($student['house']);           
+$houseTxt  = getHouseColor($student['house'], 'text');  
+
 list($r,$g,$b) = sscanf($houseHex, "#%02x%02x%02x");
 
 $initials = strtoupper(substr($student['first_name'],0,1) . substr($student['last_name'],0,1));
@@ -56,7 +51,7 @@ $initials = strtoupper(substr($student['first_name'],0,1) . substr($student['las
 <link rel="stylesheet" href="../css/portal.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-    /* Inject house color as CSS variables */
+
     :root {
         --acc:       <?= $houseHex ?>;
         --acc-light: rgba(<?= $r ?>,<?= $g ?>,<?= $b ?>, 0.15);
@@ -78,7 +73,6 @@ $initials = strtoupper(substr($student['first_name'],0,1) . substr($student['las
 <body>
 <div class="dashboard-wrap">
 
-    <!-- ── SIDEBAR ─────────────────────────────────────────── -->
     <aside class="sidebar">
         <div class="sb-brand" >
              <div class="logo">
@@ -90,7 +84,6 @@ $initials = strtoupper(substr($student['first_name'],0,1) . substr($student['las
             </div>
         </div>
 
-        <!-- User Info -->
         <div style="padding:16px;border-bottom:1px solid var(--border)">
             <div style="display:flex;align-items:center;gap:10px">
                 <div style="width:38px;height:38px;border-radius:12px;background:var(--acc);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;flex-shrink:0;box-shadow:0 3px 10px var(--acc-mid)"><?= $initials ?></div>
@@ -104,7 +97,6 @@ $initials = strtoupper(substr($student['first_name'],0,1) . substr($student['las
             </div>
         </div>
 
-        <!-- Nav -->
         <nav class="sb-nav">
             <div class="sb-section-label">Student Menu</div>
             <a href="dashboard.php" class="sb-item active"><i class="fas fa-home"></i> Dashboard</a>
@@ -121,16 +113,13 @@ $initials = strtoupper(substr($student['first_name'],0,1) . substr($student['las
             <a href="profile.php" class="sb-item"><i class="fas fa-user-cog"></i> My Profile</a>
         </nav>
 
-        <!-- Logout -->
         <div class="sb-foot">
             <a href="../logout.php" class="sb-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </div>
     </aside>
 
-    <!-- ── MAIN ─────────────────────────────────────────────── -->
     <main class="main">
 
-        <!-- Topbar -->
         <div class="topbar">
             <div class="topbar-title">Dashboard</div>
             <div class="topbar-right"><button class="theme-toggle" id="themeToggle" title="Toggle theme"><i class="fas fa-moon"></i></button>
@@ -140,7 +129,6 @@ $initials = strtoupper(substr($student['first_name'],0,1) . substr($student['las
 
         <div class="page-content">
 
-            <!-- Welcome Banner -->
             <div class="welcome-banner">
                 <div class="welcome-avatar" style="font-size:20px">👩‍🎓</div>
                 <div>
@@ -157,7 +145,6 @@ $initials = strtoupper(substr($student['first_name'],0,1) . substr($student['las
                 </div>
             </div>
 
-            <!-- Stats Row -->
             <div class="stats-row">
                 <div class="stat-card">
                     <div class="stat-icon"><i class="fas fa-id-card"></i></div>
@@ -189,10 +176,8 @@ $initials = strtoupper(substr($student['first_name'],0,1) . substr($student['las
                 </div>
             </div>
 
-            <!-- 2-col grid -->
             <div class="grid-2col">
 
-                <!-- LEFT: My Memberships -->
                 <div class="card">
                     <div class="card-head">
                         <span class="card-title"><i class="fas fa-id-card"></i> My Memberships</span>
@@ -222,10 +207,8 @@ $initials = strtoupper(substr($student['first_name'],0,1) . substr($student['las
                     </a>
                 </div>
 
-                <!-- RIGHT: Quick Actions + Events -->
                 <div class="col-right">
 
-                    <!-- Quick Actions -->
                     <div class="card">
                         <div class="card-head">
                             <span class="card-title"><i class="fas fa-bolt"></i> Quick Actions</span>
@@ -250,7 +233,6 @@ $initials = strtoupper(substr($student['first_name'],0,1) . substr($student['las
                         </div>
                     </div>
 
-                    <!-- Upcoming Events -->
                     <div class="card">
                         <div class="card-head">
                             <span class="card-title"><i class="fas fa-calendar-alt"></i> Upcoming Events</span>
@@ -279,15 +261,15 @@ $initials = strtoupper(substr($student['first_name'],0,1) . substr($student['las
                         <?php endif; ?>
                     </div>
 
-                </div><!-- /col-right -->
-            </div><!-- /grid-2col -->
+                </div>
+            </div>
 
-        </div><!-- /page-content -->
+        </div>
     </main>
 </div>
 
 <script>
-// Live clock
+
 function tick() {
     const now = new Date();
     const h = String(now.getHours()).padStart(2,'0');

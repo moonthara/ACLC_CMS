@@ -4,10 +4,10 @@ require_once ('../includes/config.php');
 requireAdmin();
 $db = getDB();
 
-$adminHouse = getAdminHouse(); // NULL = super admin, 'AZUL' etc = house admin
+$adminHouse = getAdminHouse(); 
 $isSuperAdmin = isSuperAdmin();
 
-// ── Stats (filtered by house if house_admin) ─────────────────
+
 if ($isSuperAdmin) {
     $total_students = $db->query("SELECT COUNT(*) FROM students")->fetchColumn();
     $total_clubs    = $db->query("SELECT COUNT(*) FROM clubs WHERE is_active=1")->fetchColumn();
@@ -18,7 +18,7 @@ if ($isSuperAdmin) {
         FROM memberships m JOIN students s ON m.student_id = s.student_id JOIN clubs c ON m.club_id = c.id
         WHERE m.status='pending' ORDER BY m.applied_at DESC LIMIT 10")->fetchAll();
 } else {
-    // House admin: scope everything to their house
+   
     $total_students = $db->prepare("SELECT COUNT(*) FROM students WHERE house=?");
     $total_students->execute([$adminHouse]);
     $total_students = $total_students->fetchColumn();
@@ -39,7 +39,7 @@ if ($isSuperAdmin) {
     $total_members->execute([$adminHouse]);
     $total_members = $total_members->fetchColumn();
 
-    // Only show this house's bar
+    
     $hc = $db->prepare("SELECT house, COUNT(*) as cnt FROM students WHERE house=? GROUP BY house");
     $hc->execute([$adminHouse]);
     $house_counts = $hc->fetchAll();
@@ -100,7 +100,7 @@ if ($isSuperAdmin) {
     </div>
     <div class="admin-page">
 
-        <!-- Stats Row -->
+        
         <div class="stats-row">
             <div class="stat-card"><div class="stat-icon"><i class="fas fa-users"></i></div><div><div class="stat-value"><?= number_format($total_students) ?></div><div class="stat-label"><?= $adminHouse ? sanitize($adminHouse) . ' ' : '' ?>Students</div></div></div>
             <div class="stat-card"><div class="stat-icon"><i class="fas fa-layer-group"></i></div><div><div class="stat-value"><?= $total_clubs ?></div><div class="stat-label">Active Clubs</div></div></div>
@@ -110,7 +110,7 @@ if ($isSuperAdmin) {
 
         <div style="display:grid;grid-template-columns:1fr 2fr;gap:24px;">
 
-            <!-- House bar chart -->
+            
             <div class="card">
                 <div class="card-title"><i class="fas fa-home" style="color:var(--admin-primary)"></i>
                     <?= $isSuperAdmin ? 'Students per House' : sanitize($adminHouse) . ' House Overview' ?>
@@ -132,7 +132,7 @@ if ($isSuperAdmin) {
                 <?php endforeach; ?>
             </div>
 
-            <!-- Pending Applications Table -->
+            
             <div class="card">
                 <div class="card-title">
                     <i class="fas fa-clock" style="color:#f9a825"></i>

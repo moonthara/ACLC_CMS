@@ -1,5 +1,5 @@
-# ACLC Online Club & Membership System
-### ACLC College of Mandaue | IT22F | Hannah Maica Maningo
+ACLC Online Club & Membership System
+ACLC College of Mandaue | IT22F | Hannah Maica Maningo
 
 ---
 
@@ -71,9 +71,7 @@ C:\xampp\htdocs\aclc_system\
 
 ### How it works
 Students **register themselves** at `register.php`. The system:
-1. Asks for: Last Name, First Name, Middle Name, Course, Year Level
-2. Auto-assigns a **House** in round-robin order (AZUL → CAHEL → GIALLIO → ROXXO → VIERRDY → repeat)
-3. Generates a **Student ID** in the format: `C24-01-XXXX-MAN121`
+1. 
 4. Student creates their password immediately
 5. Student uses their ID + password to log in from then on
 
@@ -81,30 +79,18 @@ Students **register themselves** at `register.php`. The system:
 ```
 C24-01-0001-MAN121
  │    │   │    └── Section code (MAN121)
- │    │   └─────── 4-digit sequence (global counter)
+ │    │   └─────── 4-digit sequence (StudentID)
  │    └─────────── Batch/section (01)
  └──────────────── School year code (C24)
 ```
 
-### Pre-loaded Students (1,154 from Excel)
-The database comes with 1,154 students pre-loaded with IDs `C24-01-0001-MAN121` to `C24-01-1154-MAN121`.
-New registrations will start from `C24-01-1155-MAN121` onward.
 
 ---
-
-## 🔑 Default Login
-
-### Admin
-- **Username:** `admin`
-- **Password:** `admin123`
 
 ### Pre-loaded Students
 Pre-loaded students have **no password yet**. They must go to `register.php`,
 but since their name is already in the system... 
 
-> **Note:** Pre-loaded students cannot self-register (they're already in the DB).
-> They can log in ONLY after an admin sets their password, OR you can remove
-> the pre-loaded data and let everyone register fresh.
 
 ---
 
@@ -120,14 +106,14 @@ but since their name is already in the system...
 ---
 
 ## ✨ Features
-- **Self-Registration:** Students register and get their own generated ID
+- **Registration:** own Student Number & Creat their own Password
 - **Auto House Assignment:** Round-robin house assignment (no bias)
 - **Simple Login:** Just Student ID + Password
 - **Digital Membership Cards:** Auto-generated on approval
 - **Admin Dashboard:** Live stats, pending applications
 - **House-colored UI:** Each house has its own color theme
 - **CSV Export:** Students & memberships reports
-- **Events & Announcements:** Posted by admin, visible to students
+- **Events & Announcements:** Posted by admins, visible to students
 
 ---
 

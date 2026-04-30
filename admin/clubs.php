@@ -8,13 +8,13 @@ $adminHouse   = getAdminHouse();
 $isSuperAdmin = isSuperAdmin();
 $msg          = '';
 
-// ── Add club ─────────────────────────────────────────────────
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_club'])) {
     $name = trim($_POST['club_name'] ?? '');
     $desc = trim($_POST['description'] ?? '');
     $max  = (int)($_POST['max_members'] ?? 50);
 
-    // House admin can only create clubs for their own house
+    
     $house = $isSuperAdmin ? ($_POST['house'] ?: null) : $adminHouse;
 
     if ($name) {
@@ -24,11 +24,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_club'])) {
     }
 }
 
-// ── Toggle active ─────────────────────────────────────────────
+
 if (isset($_GET['toggle'])) {
     $cid = (int)$_GET['toggle'];
 
-    // House admin: only toggle clubs that belong to their house
+    
     if (!$isSuperAdmin) {
         $check = $db->prepare("SELECT id FROM clubs WHERE id=? AND house=?");
         $check->execute([$cid, $adminHouse]);
@@ -39,14 +39,14 @@ if (isset($_GET['toggle'])) {
     redirect('clubs.php');
 }
 
-// ── Fetch clubs ───────────────────────────────────────────────
+
 if ($isSuperAdmin) {
     $clubs = $db->query("SELECT c.*,
         (SELECT COUNT(*) FROM memberships m WHERE m.club_id=c.id AND m.status='approved') as member_count,
         (SELECT COUNT(*) FROM memberships m WHERE m.club_id=c.id AND m.status='pending')  as pending_count
         FROM clubs c ORDER BY c.house, c.club_name")->fetchAll();
 } else {
-    // House admin sees clubs tagged to their house OR open-to-all (NULL house) clubs
+    
     $stmt = $db->prepare("SELECT c.*,
         (SELECT COUNT(*) FROM memberships m WHERE m.club_id=c.id AND m.status='approved') as member_count,
         (SELECT COUNT(*) FROM memberships m WHERE m.club_id=c.id AND m.status='pending')  as pending_count
@@ -138,7 +138,7 @@ if ($isSuperAdmin) {
                 <div style="display:flex;gap:8px">
                     <a href="memberships.php?club=<?= $club['id'] ?>" style="flex:1;text-align:center;padding:8px;background:#e3f2fd;color:#1565c0;border-radius:8px;text-decoration:none;font-size:12px;font-weight:700">View Members</a>
                     <?php
-                    // House admin can only toggle their own house's clubs, not all-houses clubs
+                    
                     $canToggle = $isSuperAdmin || ($club['house'] === $adminHouse);
                     ?>
                     <?php if ($canToggle): ?>
@@ -153,7 +153,7 @@ if ($isSuperAdmin) {
     </div>
 </main>
 
-<!-- Add Club Modal -->
+
 <div class="modal-overlay" id="addModal">
     <div class="modal">
         <h3 style="margin-bottom:20px;font-size:20px;color:var(--admin-primary)">Add New Club</h3>
@@ -168,7 +168,7 @@ if ($isSuperAdmin) {
             </div>
 
             <?php if ($isSuperAdmin): ?>
-            <!-- Super admin can assign any house or all houses -->
+            
             <div class="form-group">
                 <label>House (leave blank for all houses)</label>
                 <select name="house">
@@ -179,7 +179,7 @@ if ($isSuperAdmin) {
                 </select>
             </div>
             <?php else: ?>
-            <!-- House admin: club is auto-assigned to their house -->
+           
             <div class="form-group">
                 <label>House</label>
                 <input type="text" value="<?= sanitize($adminHouse) ?>" readonly

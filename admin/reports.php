@@ -7,7 +7,7 @@ $db           = getDB();
 $adminHouse   = getAdminHouse();
 $isSuperAdmin = isSuperAdmin();
 
-// ── CSV Export ────────────────────────────────────────────────
+
 if (isset($_GET['export'])) {
     $type      = $_GET['export'];
     $expHouse  = $adminHouse ?? ($_GET['house'] ?? null);
@@ -40,7 +40,7 @@ if (isset($_GET['export'])) {
     exit;
 }
 
-// ── Stats ─────────────────────────────────────────────────────
+
 if ($isSuperAdmin) {
     $stats = [
         'total_students'  => $db->query("SELECT COUNT(*) FROM students")->fetchColumn(),
@@ -61,7 +61,7 @@ if ($isSuperAdmin) {
         COUNT(CASE WHEN m.status='pending'  THEN 1 END) as pending
         FROM clubs c LEFT JOIN memberships m ON c.id=m.club_id WHERE c.is_active=1 GROUP BY c.id ORDER BY members DESC")->fetchAll();
 } else {
-    // House admin: scoped stats
+   
     $s1 = $db->prepare("SELECT COUNT(*) FROM students WHERE house=?"); $s1->execute([$adminHouse]);
     $s2 = $db->prepare("SELECT COUNT(*) FROM students WHERE house=? AND password IS NOT NULL"); $s2->execute([$adminHouse]);
     $s3 = $db->prepare("SELECT COUNT(*) FROM memberships m JOIN students s ON m.student_id=s.student_id WHERE m.status='approved' AND s.house=?"); $s3->execute([$adminHouse]);
@@ -156,7 +156,7 @@ if ($isSuperAdmin) {
 
     <div class="admin-page">
 
-        <!-- Summary Stats -->
+        
         <div class="stats-row" style="grid-template-columns:repeat(3,1fr);margin-bottom:28px">
             <div class="stat-card" style="border-left-color:#0d47a1">
                 <div class="stat-icon" style="background:#e8f0fe;color:#0d47a1"><i class="fas fa-users"></i></div>
@@ -185,7 +185,7 @@ if ($isSuperAdmin) {
 
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
 
-            <!-- House Breakdown -->
+            
             <div class="card">
                 <div class="card-title"><i class="fas fa-home" style="color:#0d47a1"></i>
                     <?= $isSuperAdmin ? 'Breakdown by House' : sanitize($adminHouse) . ' House Stats' ?>
@@ -207,7 +207,7 @@ if ($isSuperAdmin) {
                 </div>
             </div>
 
-            <!-- Course Breakdown -->
+            
             <div class="card">
                 <div class="card-title"><i class="fas fa-graduation-cap" style="color:#0d47a1"></i> Breakdown by Course</div>
                 <?php foreach ($course_stats as $c): ?>
@@ -221,7 +221,7 @@ if ($isSuperAdmin) {
                 <?php endforeach; ?>
             </div>
 
-            <!-- Club Stats -->
+            
             <div class="card" style="grid-column:1/-1">
                 <div class="card-title"><i class="fas fa-layer-group" style="color:#0d47a1"></i> Club Membership Stats</div>
                 <div class="table-wrapper">

@@ -14,7 +14,6 @@ if (!$student) { session_destroy(); redirect('/aclc_system/index.php'); }
 $msg   = '';
 $error = '';
 
-// ── Join Club ─────────────────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['join_club'])) {
     $club_id = (int)$_POST['club_id'];
     $exists = $db->prepare("SELECT id FROM memberships WHERE student_id=? AND club_id=?");
@@ -92,7 +91,6 @@ $student_house_key = strtolower(trim(str_ireplace('house', '', $student['house']
 $is_own_house = $selected_house &&
     strtolower(trim(str_ireplace('house', '', $selected_house))) === $student_house_key;
 
-// ── 10 clubs config (same in every house) ────────────────
 $all_clubs_config = [
     [
         'category' => 'Sports & Fitness',
@@ -196,8 +194,6 @@ $all_clubs_config = [
     ],
 ];
 
-// Fetch ALL active clubs — all 10 clubs exist in every house,
-// so we don't filter by house. House context only controls join access.
 $all_clubs_db = [];
 if ($selected_house) {
     $stmt = $db->prepare("
@@ -213,19 +209,18 @@ if ($selected_house) {
     }
 }
 
-// Helper — find a DB club row by matching name keywords (multiple strategies)
 function matchDbClub($key, $name, $db_clubs) {
     $name_lower = strtolower($name);
-    // Strategy 1: key is substring of db club name
+
     foreach ($db_clubs as $dbname => $row) {
         if (strpos($dbname, $key) !== false) return $row;
     }
-    // Strategy 2: first word of config name is substring of db club name
+
     $first_word = strtolower(explode(' ', $name)[0]);
     foreach ($db_clubs as $dbname => $row) {
         if (strpos($dbname, $first_word) !== false) return $row;
     }
-    // Strategy 3: any word from config name (≥4 chars) found in db club name
+
     foreach (explode(' ', $name_lower) as $word) {
         if (strlen($word) < 4) continue;
         foreach ($db_clubs as $dbname => $row) {
@@ -268,7 +263,6 @@ $initials = strtoupper(substr($student['first_name'],0,1) . substr($student['las
     --text-faint:     #9294a8;
 }
 
-/* ─── HOUSE SELECTION GRID ─────────────────────────────── */
 .houses-list {
     display: flex;
     flex-direction: column;
@@ -417,7 +411,6 @@ $initials = strtoupper(substr($student['first_name'],0,1) . substr($student['las
     50%      { opacity: 0.5; transform: scale(0.8); }
 }
 
-/* ─── HOUSE PAGE HEADER ─────────────────────────────────── */
 .house-banner {
     border-radius: 16px;
     padding: 24px 26px;
@@ -488,7 +481,6 @@ $initials = strtoupper(substr($student['first_name'],0,1) . substr($student['las
     flex-shrink: 0;
 }
 
-/* ─── LOCKED BANNER ─────────────────────────────────────── */
 .locked-bar {
     display: flex;
     align-items: center;
@@ -505,7 +497,6 @@ $initials = strtoupper(substr($student['first_name'],0,1) . substr($student['las
 
 .locked-bar i { font-size: 13px; flex-shrink: 0; }
 
-/* ─── CATEGORY SECTION ──────────────────────────────────── */
 .category-section {
     margin-bottom: 28px;
 }
@@ -549,7 +540,6 @@ $initials = strtoupper(substr($student['first_name'],0,1) . substr($student['las
     gap: 14px;
 }
 
-/* ─── CLUB CARD ─────────────────────────────────────────── */
 .club-card {
     background: var(--bg-card);
     border: 1px solid var(--border);
@@ -676,7 +666,6 @@ $initials = strtoupper(substr($student['first_name'],0,1) . substr($student['las
     background: var(--h-color);
 }
 
-/* ─── JOIN BUTTONS ──────────────────────────────────────── */
 .btn-join {
     padding: 7px 14px;
     border-radius: 8px;
@@ -713,7 +702,6 @@ $initials = strtoupper(substr($student['first_name'],0,1) . substr($student['las
 .btn-join.reapply { background: rgba(var(--h-rgb), 0.12); color: var(--h-color); border: 1px solid rgba(var(--h-rgb), 0.25); }
 .btn-join.reapply:hover { background: rgba(var(--h-rgb), 0.2); }
 
-/* ─── MISC ──────────────────────────────────────────────── */
 .page-intro {
     display: flex;
     align-items: flex-start;
@@ -765,7 +753,6 @@ $initials = strtoupper(substr($student['first_name'],0,1) . substr($student['las
 <body>
 <div class="dashboard-wrap">
 
-    <!-- ── SIDEBAR ──────────────────────────────────────── -->
     <aside class="sidebar">
         <div class="sb-brand" style="padding:20px 16px 14px;border-bottom:1px solid var(--border)">
             <div class="logo">
@@ -794,10 +781,8 @@ $initials = strtoupper(substr($student['first_name'],0,1) . substr($student['las
         <div class="sb-foot"><a href="../logout.php" class="sb-logout"><i class="fas fa-sign-out-alt"></i> Logout</a></div>
     </aside>
 
-    <!-- ── MAIN ─────────────────────────────────────────── -->
     <main class="main">
 
-        <!-- Topbar -->
         <div class="topbar">
             <div style="display:flex;align-items:center;gap:10px">
                 <?php if ($selected_house): ?>
@@ -818,7 +803,6 @@ $initials = strtoupper(substr($student['first_name'],0,1) . substr($student['las
 
         <div class="page-content">
 
-            <!-- Alerts -->
             <?php if ($msg): ?>
             <div class="alert alert-success" style="margin-bottom:20px"><i class="fas fa-check-circle"></i> <?= $msg ?></div>
             <?php endif; ?>
@@ -827,9 +811,7 @@ $initials = strtoupper(substr($student['first_name'],0,1) . substr($student['las
             <?php endif; ?>
 
             <?php if (!$selected_house): ?>
-            <!-- ══════════════════════════════════════════
-                 STEP 1 — HOUSE SELECTION
-            ══════════════════════════════════════════ -->
+            
             <div class="page-intro">
                 <div>
                     <h2>Select a House</h2>
@@ -842,7 +824,6 @@ $initials = strtoupper(substr($student['first_name'],0,1) . substr($student['las
                     $is_own = $student_house_key === $key;
                     list($hr,$hg,$hb) = sscanf($house['color'], "#%02x%02x%02x");
 
-                    // Count clubs from DB
                     $cnt = $db->prepare("SELECT COUNT(*) FROM clubs WHERE is_active=1 AND LOWER(REPLACE(REPLACE(house,' HOUSE',''),' house',''))=?");
                     $cnt->execute([$key]);
                     $club_count = (int)$cnt->fetchColumn();
@@ -888,21 +869,17 @@ $initials = strtoupper(substr($student['first_name'],0,1) . substr($student['las
             </div>
 
             <?php else:
-            // ══════════════════════════════════════════
-            // STEP 2 — CLUBS FOR SELECTED HOUSE
-            // ══════════════════════════════════════════
+
             $bare_key = strtolower(trim(str_ireplace('house', '', $selected_house)));
             $h        = $houses[$bare_key] ?? null;
             $h_color  = $h ? $h['color'] : '#888';
             list($hr,$hg,$hb) = sscanf($h_color, "#%02x%02x%02x");
             ?>
 
-            <!-- Back link -->
             <a href="clubs.php" class="clubs-topbar-back">
                 <i class="fas fa-arrow-left" style="font-size:10px"></i> All Houses
             </a>
 
-            <!-- House Banner -->
             <div class="house-banner"
                  style="--h-color:<?= $h_color ?>;--h-rgb:<?= $hr ?>,<?= $hg ?>,<?= $hb ?>"
                  data-emoji="<?= $h ? $h['emoji'] : '🏠' ?>">
@@ -921,7 +898,6 @@ $initials = strtoupper(substr($student['first_name'],0,1) . substr($student['las
                 <?php endif; ?>
             </div>
 
-            <!-- Locked notice for other houses -->
             <?php if (!$is_own_house): ?>
             <div class="locked-bar">
                 <i class="fas fa-lock"></i>
@@ -934,7 +910,6 @@ $initials = strtoupper(substr($student['first_name'],0,1) . substr($student['las
             </div>
             <?php endif; ?>
 
-            <!-- ── Categories & Clubs ────────────────────── -->
             <?php foreach ($all_clubs_config as $cat): ?>
             <div class="category-section">
 
@@ -959,7 +934,6 @@ $initials = strtoupper(substr($student['first_name'],0,1) . substr($student['las
                     ?>
                     <div class="club-card" style="--h-color:<?= $h_color ?>;--h-rgb:<?= $hr ?>,<?= $hg ?>,<?= $hb ?>">
 
-                        <!-- Head -->
                         <div class="club-card-head">
                             <div class="club-icon"><?= $club_cfg['icon'] ?></div>
                             <div style="flex:1;min-width:0">
@@ -968,14 +942,12 @@ $initials = strtoupper(substr($student['first_name'],0,1) . substr($student['las
                             </div>
                         </div>
 
-                        <!-- Activities -->
                         <div class="club-acts">
                             <?php foreach ($club_cfg['acts'] as $act): ?>
                             <span class="act-tag"><?= htmlspecialchars($act) ?></span>
                             <?php endforeach; ?>
                         </div>
 
-                        <!-- Footer -->
                         <div class="club-footer">
                             <div class="cap-wrap">
                                 <div class="cap-text"><?= $cur_m ?>/<?= $max_m ?> members</div>
@@ -1017,7 +989,7 @@ $initials = strtoupper(substr($student['first_name'],0,1) . substr($student['las
             <?php endforeach; ?>
 
             <?php endif; ?>
-        </div><!-- /page-content -->
+        </div>
     </main>
 </div>
 <script>

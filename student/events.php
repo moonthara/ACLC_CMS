@@ -54,7 +54,6 @@ foreach ($events as $ev) {
     --text-faint:     #9294a8;
 }
 
-/* ── DARK MODE ──────────────────────────────────────────── */
 body.dark {
     --bg-base:   #0f1117;
     --bg-card:   #1a1d27;
@@ -68,7 +67,6 @@ body.dark {
     --acc-light: rgba(<?= $r ?>,<?= $g ?>,<?= $b ?>, 0.20);
 }
 
-/* ── TABS ───────────────────────────────────────────────── */
 .ev-tabs {
     display: flex;
     gap: 8px;
@@ -106,7 +104,6 @@ body.dark {
     color: var(--acc);
 }
 
-/* ── SECTION LABEL ──────────────────────────────────────── */
 .section-label {
     display: flex;
     align-items: center;
@@ -124,7 +121,6 @@ body.dark {
 }
 .section-label:first-child { margin-top: 0; }
 
-/* ── CARD ───────────────────────────────────────────────── */
 .ev-card {
     background: var(--bg-card);
     border-radius: 14px;
@@ -145,7 +141,6 @@ body.dark {
 .ev-stripe { width: 5px; flex-shrink: 0; background: var(--acc); }
 .ev-card.past .ev-stripe { opacity: 0.4; }
 
-/* Date col */
 .ev-date-col {
     flex-shrink: 0;
     width: 70px;
@@ -180,7 +175,6 @@ body.dark {
     color: var(--text-faint);
 }
 
-/* Body */
 .ev-body { flex: 1; padding: 16px 18px; min-width: 0; }
 .ev-tags { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 7px; }
 .ev-badge {
@@ -215,7 +209,6 @@ body.dark {
 }
 .ev-meta-item i { font-size: 10px; opacity: 0.7; }
 
-/* Right col */
 .ev-time-col {
     flex-shrink: 0;
     display: flex; flex-direction: column; align-items: flex-end; justify-content: center;
@@ -238,7 +231,6 @@ body.dark {
     50%      { box-shadow: 0 0 0 6px var(--acc-soft); }
 }
 
-/* Stats */
 .ev-stats { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
 .ev-stat-pill {
     display: inline-flex; align-items: center; gap: 8px;
@@ -252,16 +244,13 @@ body.dark {
     color: var(--acc); line-height: 1;
 }
 
-/* Empty */
 .ev-empty { text-align: center; padding: 60px 20px; color: var(--text-faint); }
 .ev-empty i { font-size: 38px; opacity: 0.3; margin-bottom: 12px; display: block; }
 .ev-empty p { font-size: 13px; font-family: 'IBM Plex Mono', monospace; }
 
-/* Tab panels */
 .tab-panel { display: none; }
 .tab-panel.active { display: block; }
 
-/* ── MODAL ──────────────────────────────────────────────── */
 .ev-overlay {
     display: none;
     position: fixed;
@@ -370,7 +359,6 @@ body.dark {
 <body>
 <div class="dashboard-wrap">
 
-    <!-- SIDEBAR -->
     <aside class="sidebar">
         <div class="sb-brand" style="padding:20px 16px 14px;border-bottom:1px solid var(--border)">
             <div class="logo">
@@ -399,7 +387,6 @@ body.dark {
         <div class="sb-foot"><a href="../logout.php" class="sb-logout"><i class="fas fa-sign-out-alt"></i> Logout</a></div>
     </aside>
 
-    <!-- MAIN -->
     <main class="main">
         <div class="topbar">
             <div class="topbar-title">Events &amp; Announcements</div>
@@ -414,13 +401,11 @@ body.dark {
             </div>
             <?php else: ?>
 
-            <!-- Stats -->
             <div class="ev-stats">
                 <div class="ev-stat-pill"><span class="num"><?= count($upcoming) ?></span> Upcoming</div>
                 <div class="ev-stat-pill"><span class="num"><?= count($past) ?></span> Past</div>
             </div>
 
-            <!-- Tabs -->
             <div class="ev-tabs">
                 <button class="ev-tab active" onclick="switchTab('upcoming', this)">
                     <i class="fas fa-calendar-alt"></i> Upcoming
@@ -432,7 +417,6 @@ body.dark {
                 </button>
             </div>
 
-            <!-- UPCOMING PANEL -->
             <div class="tab-panel active" id="panel-upcoming">
                 <?php if (empty($upcoming)): ?>
                 <div class="ev-empty">
@@ -494,7 +478,6 @@ body.dark {
                 <?php endif; ?>
             </div>
 
-            <!-- PAST PANEL -->
             <div class="tab-panel" id="panel-past">
                 <?php if (empty($past)): ?>
                 <div class="ev-empty">
@@ -556,7 +539,6 @@ body.dark {
     </main>
 </div>
 
-<!-- ── MODAL ─────────────────────────────────────────────── -->
 <div class="ev-overlay" id="evOverlay" onclick="overlayClick(event)">
     <div class="ev-modal" id="evModal">
         <div class="ev-modal-top"></div>
@@ -571,7 +553,7 @@ body.dark {
 </div>
 
 <script>
-/* ── TAB SWITCHING ─────────────────────────────────────── */
+
 function switchTab(name, btn) {
     document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.ev-tab').forEach(b => b.classList.remove('active'));
@@ -579,7 +561,6 @@ function switchTab(name, btn) {
     btn.classList.add('active');
 }
 
-/* ── MODAL ─────────────────────────────────────────────── */
 function openModal(el) {
     var d = el.dataset;
 
@@ -628,7 +609,6 @@ document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeModal();
 });
 
-/* ── DARK MODE ─────────────────────────────────────────── */
 (function(){
     var body  = document.body;
     var saved = localStorage.getItem('aclc_theme') || 'light';

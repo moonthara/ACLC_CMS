@@ -8,12 +8,12 @@ $adminHouse   = getAdminHouse();
 $isSuperAdmin = isSuperAdmin();
 $msg          = '';
 
-// ── Approve / Reject ─────────────────────────────────────────
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['membership_id'])) {
     $mid    = (int)$_POST['membership_id'];
     $action = $_POST['action'];
 
-    // House admin: verify this membership belongs to their house before acting
+
     if (!$isSuperAdmin) {
         $check = $db->prepare("SELECT m.id FROM memberships m
             JOIN students s ON m.student_id=s.student_id
@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['mem
     }
 }
 
-// ── Filters ──────────────────────────────────────────────────
+
 $status_filter = $_GET['status'] ?? 'pending';
 $house_filter  = $adminHouse ?? ($_GET['house'] ?? '');
 $search        = trim($_GET['search'] ?? '');
@@ -56,7 +56,7 @@ $params = [];
 
 if ($status_filter) { $where .= " AND m.status=?";   $params[] = $status_filter; }
 
-// House admin locked to their house
+
 if ($adminHouse) {
     $where .= " AND s.house=?"; $params[] = $adminHouse;
 } elseif ($house_filter) {
@@ -78,7 +78,7 @@ $memberships = $db->prepare("SELECT m.*, s.first_name, s.last_name, s.student_id
 $memberships->execute($params);
 $memberships = $memberships->fetchAll();
 
-// Count tabs (scoped by house if house_admin)
+
 if ($adminHouse) {
     $counts = $db->prepare("SELECT m.status, COUNT(*) as cnt FROM memberships m
         JOIN students s ON m.student_id=s.student_id WHERE s.house=? GROUP BY m.status");
@@ -153,7 +153,7 @@ foreach ($counts->fetchAll() as $c) $count_map[$c['status']] = $c['cnt'];
         <div class="alert alert-success" style="margin-bottom:16px"><i class="fas fa-check-circle"></i> <?= sanitize($msg) ?></div>
         <?php endif; ?>
 
-        <!-- Status Tabs -->
+        
         <div class="tab-bar">
             <?php foreach (['pending' => '⏳ Pending', 'approved' => '✅ Approved', 'rejected' => '❌ Rejected', '' => '📋 All'] as $val => $label): ?>
             <a href="?status=<?= $val ?>" class="tab <?= $status_filter === $val ? 'active' : '' ?>">
@@ -164,7 +164,7 @@ foreach ($counts->fetchAll() as $c) $count_map[$c['status']] = $c['cnt'];
             <?php endforeach; ?>
         </div>
 
-        <!-- Filters -->
+        
         <form method="GET" class="filter-bar">
             <input type="hidden" name="status" value="<?= sanitize($status_filter) ?>">
             <input type="text" name="search" value="<?= sanitize($search) ?>" placeholder="Search by name or student ID...">
@@ -239,7 +239,7 @@ foreach ($counts->fetchAll() as $c) $count_map[$c['status']] = $c['cnt'];
     </div>
 </main>
 
-<!-- Reject Modal -->
+
 <div class="modal-overlay" id="rejectModal">
     <div class="modal">
         <h3 style="margin-bottom:16px;font-size:18px">Reject Application</h3>

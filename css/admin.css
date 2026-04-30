@@ -1,8 +1,3 @@
-/* ============================================================
-   ACLC ADMIN PANEL — Hyper Blockchain Theme
-   Fonts: Syne (headings/UI) + IBM Plex Mono (data/code)
-   Dark base #080809 · Admin accent: #e01a22 (red)
-   ============================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 
@@ -32,7 +27,7 @@
     --red-bg:          rgba(248,113,113,0.07);
 }
 
-/* ── RESET & BASE ─────────────────────────────────────────── */
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
@@ -46,7 +41,6 @@ html, body {
 
 body { display: flex; min-height: 100vh; }
 
-/* Grid bg */
 body::before {
     content: '';
     position: fixed; inset: 0; z-index: 0; pointer-events: none;
@@ -56,7 +50,6 @@ body::before {
     background-size: 48px 48px;
 }
 
-/* Dual radial glow — matches login page */
 body::after {
     content: '';
     position: fixed; inset: 0; z-index: 0; pointer-events: none;
@@ -72,7 +65,7 @@ a { color: inherit; text-decoration: none; }
 ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.07); border-radius: 10px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.12); }
 
-/* ── LOGIN PAGE ───────────────────────────────────────────── */
+
 .admin-login-wrap {
     display: flex;
     align-items: center;
@@ -136,7 +129,7 @@ a { color: inherit; text-decoration: none; }
     letter-spacing: 0.02em;
 }
 
-/* Input with icon */
+
 .input-group {
     position: relative;
     margin-bottom: 12px;
@@ -167,7 +160,7 @@ a { color: inherit; text-decoration: none; }
     background: rgba(0,0,0,0.45);
 }
 
-/* ── SIDEBAR ──────────────────────────────────────────────── */
+
 .admin-sidebar {
     width: 218px; min-width: 218px;
     background: var(--sidebar-bg);
@@ -177,7 +170,7 @@ a { color: inherit; text-decoration: none; }
     overflow-y: auto; flex-shrink: 0; z-index: 100;
 }
 
-/* Sidebar top-glow */
+
 .admin-sidebar::before {
     content: '';
     position: absolute; top: 0; left: 0; right: 0; height: 1px;
@@ -230,7 +223,7 @@ a { color: inherit; text-decoration: none; }
 
 .admin-nav-item i { font-size: 12px; flex-shrink: 0; width: 15px; text-align: center; }
 
-/* ── MAIN ─────────────────────────────────────────────────── */
+
 .admin-main {
     flex: 1;
     display: flex; flex-direction: column;
@@ -256,7 +249,6 @@ a { color: inherit; text-decoration: none; }
 
 .admin-page { padding: 22px 26px; flex: 1; }
 
-/* ── STAT CARDS ───────────────────────────────────────────── */
 .stats-row {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -309,7 +301,6 @@ a { color: inherit; text-decoration: none; }
     font-family: 'IBM Plex Mono', monospace;
 }
 
-/* ── CARD ─────────────────────────────────────────────────── */
 .card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -335,7 +326,6 @@ a { color: inherit; text-decoration: none; }
     font-family: 'IBM Plex Mono', monospace;
 }
 
-/* ── TABLES ───────────────────────────────────────────────── */
 .table-wrapper { overflow-x: auto; }
 
 .data-table { width: 100%; border-collapse: collapse; }
@@ -358,7 +348,6 @@ a { color: inherit; text-decoration: none; }
 .data-table tbody tr:last-child td { border-bottom: none; }
 .data-table tbody tr:hover td { background: rgba(255,255,255,0.015); }
 
-/* ── CLUBS ────────────────────────────────────────────────── */
 .clubs-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -387,7 +376,6 @@ a { color: inherit; text-decoration: none; }
 .club-card-name { font-size: 13px; font-weight: 800; color: var(--text); letter-spacing: -0.01em; }
 .club-card-desc { font-size: 11px; color: var(--text-muted); margin: 5px 0 12px; line-height: 1.6; font-family: 'IBM Plex Mono', monospace; }
 
-/* ── EVENTS ───────────────────────────────────────────────── */
 .event-item {
     display: flex; align-items: flex-start; gap: 14px;
     padding: 14px 18px;
@@ -434,7 +422,6 @@ a { color: inherit; text-decoration: none; }
 .tag-event        { background: var(--acc-light); color: var(--admin-secondary); border: 1px solid var(--acc-mid); }
 .tag-announcement { background: rgba(251,191,36,0.07); color: var(--yellow); border: 1px solid rgba(251,191,36,0.12); }
 
-/* ── FORM ELEMENTS ────────────────────────────────────────── */
 .form-group { margin-bottom: 14px; }
 
 .form-group label {
@@ -482,7 +469,6 @@ a { color: inherit; text-decoration: none; }
 .form-group textarea { resize: vertical; min-height: 80px; }
 .form-group select option { background: #0d0d0f; color: var(--text); }
 
-/* ── BUTTONS ──────────────────────────────────────────────── */
 .btn-primary {
     display: inline-flex; align-items: center; gap: 7px;
     padding: 9px 18px;
@@ -525,7 +511,6 @@ code {
     border: 1px solid var(--border) !important;
 }
 
-/* ── MEMBERSHIP STATUS BADGES ─────────────────────────────── */
 .membership-status {
     display: inline-block; padding: 2px 8px;
     border-radius: 4px; font-size: 9px; font-weight: 700;
@@ -537,7 +522,6 @@ code {
 .status-approved { background: var(--green-bg);  color: var(--green);  border: 1px solid rgba(74,222,128,0.12); }
 .status-rejected { background: var(--red-bg);    color: var(--red);    border: 1px solid rgba(248,113,113,0.12); }
 
-/* ── ALERTS ───────────────────────────────────────────────── */
 .alert {
     padding: 10px 14px; border-radius: 8px; font-size: 12px;
     display: flex; align-items: center; gap: 8px; margin-bottom: 14px;
@@ -554,7 +538,6 @@ code {
     border: 1px solid rgba(74,222,128,0.15);
 }
 
-/* ── MODAL ────────────────────────────────────────────────── */
 .modal-overlay {
     display: none; position: fixed; inset: 0;
     background: rgba(0,0,0,0.8);
@@ -609,7 +592,6 @@ code {
 
 .modal textarea::placeholder { color: var(--text-muted); }
 
-/* ── FILTER BAR ───────────────────────────────────────────── */
 .filter-bar {
     background: var(--surface) !important;
     border: 1px solid var(--border) !important;
@@ -638,7 +620,6 @@ code {
     box-shadow: 0 0 0 3px var(--acc-light) !important;
 }
 
-/* ── TAB BAR ──────────────────────────────────────────────── */
 .tab-bar {
     display: flex; gap: 3px;
     background: var(--surface) !important;
@@ -666,7 +647,6 @@ code {
 .tab .count { padding: 1px 6px; border-radius: 100px; font-size: 10px; background: rgba(255,255,255,0.15); font-family: 'IBM Plex Mono', monospace; }
 .tab:not(.active) .count { background: var(--acc-light); color: var(--admin-primary); }
 
-/* ── PAGINATION ───────────────────────────────────────────── */
 .pagination {
     display: flex; gap: 5px;
     align-items: center; justify-content: center; margin-top: 18px;
@@ -695,7 +675,6 @@ code {
     background: var(--acc-light);
 }
 
-/* ── EXPORT BUTTONS ───────────────────────────────────────── */
 .export-btn {
     display: inline-flex; align-items: center; gap: 7px;
     padding: 9px 16px; border-radius: 8px;

@@ -8,7 +8,6 @@ $adminHouse   = getAdminHouse();
 $isSuperAdmin = isSuperAdmin();
 $msg          = '';
 
-// ── Post event ────────────────────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_event'])) {
     $title      = trim($_POST['title'] ?? '');
     $desc       = trim($_POST['description'] ?? '');
@@ -17,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_event'])) {
     $event_time = $_POST['event_time'] ?: null;
     $venue      = trim($_POST['venue'] ?? '');
     $type       = $_POST['type'] ?? 'event';
-    // House admin: always post to their house
+    
     $house      = $isSuperAdmin ? ($_POST['house'] ?: null) : $adminHouse;
 
     if ($title) {
@@ -27,11 +26,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_event'])) {
     }
 }
 
-// ── Delete ────────────────────────────────────────────────────
+
 if (isset($_GET['delete'])) {
     $eid = (int)$_GET['delete'];
     if (!$isSuperAdmin) {
-        // House admin can only delete events for their own house
+        
         $check = $db->prepare("SELECT id FROM events WHERE id=? AND house=?");
         $check->execute([$eid, $adminHouse]);
         if (!$check->fetch()) { redirect('events.php'); }
@@ -40,7 +39,7 @@ if (isset($_GET['delete'])) {
     redirect('events.php');
 }
 
-// ── Fetch events ──────────────────────────────────────────────
+
 if ($isSuperAdmin) {
     $events = $db->query("SELECT e.*, c.club_name FROM events e LEFT JOIN clubs c ON e.club_id=c.id ORDER BY e.created_at DESC")->fetchAll();
 } else {
@@ -50,7 +49,7 @@ if ($isSuperAdmin) {
     $events = $stmt->fetchAll();
 }
 
-// Clubs available for house admin (their house + open clubs)
+
 if ($isSuperAdmin) {
     $clubs = $db->query("SELECT id, club_name FROM clubs WHERE is_active=1 ORDER BY club_name")->fetchAll();
 } else {
@@ -138,7 +137,7 @@ if ($isSuperAdmin) {
                         <?php endif; ?>
                     </div>
                     <?php
-                    // House admin can only delete their own house events
+                    
                     $canDelete = $isSuperAdmin || ($ev['house'] === $adminHouse);
                     ?>
                     <?php if ($canDelete): ?>
@@ -153,7 +152,6 @@ if ($isSuperAdmin) {
             </div>
         </div>
 
-        <!-- Post Form -->
         <div>
             <div class="card">
                 <div class="card-title"><i class="fas fa-plus-circle" style="color:var(--admin-primary)"></i> Post Event / Announcement</div>

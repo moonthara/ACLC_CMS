@@ -15,6 +15,17 @@ $error = '';
 $step  = 1;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'find') {
+    
+    $recaptcha_secret = "6LfLFM8sAAAAAJBp32OchxbzTC-4RRcL2WNy_U-k";
+    $recaptcha_response = $_POST['g-recaptcha-response'] ?? '';
+    $verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$recaptcha_secret}&response={$recaptcha_response}");
+    $captcha_result = json_decode($verify);
+
+    if (!$captcha_result->success) {
+        $error = 'Please complete the CAPTCHA verification.';
+    } else {
+
+
     $p1 = strtoupper(trim($_POST['p1'] ?? ''));
     $p2 = strtoupper(trim($_POST['p2'] ?? ''));
     $p3 = strtoupper(trim($_POST['p3'] ?? ''));
@@ -40,6 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'find'
         }
     }
 }
+}
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'create_password') {
     $sid     = $_SESSION['login_pending_id'] ?? '';
@@ -110,12 +123,12 @@ $is_new        = $_SESSION['login_is_new']        ?? false;
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
     <style>
-    /* ─── RESET ─────────────────────────────────────────── */
+
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-    /* ─── ROOT VARS ──────────────────────────────────────── */
     :root {
         --accent:   #e01a22;
         --accent2:  #ff4d54;
@@ -127,7 +140,6 @@ $is_new        = $_SESSION['login_is_new']        ?? false;
         --field-bg: rgba(255,255,255,0.055);
     }
 
-    /* ─── BODY / BACKGROUND ──────────────────────────────── */
     body {
         font-family: 'Barlow', sans-serif;
         background-color: var(--bg);
@@ -153,7 +165,6 @@ $is_new        = $_SESSION['login_is_new']        ?? false;
         filter: brightness(0.38) saturate(0.7);
     }
 
-    /* Extra vignette / gradient on top of photo */
     .bg-layer::after {
         content: '';
         position: absolute;
@@ -163,7 +174,6 @@ $is_new        = $_SESSION['login_is_new']        ?? false;
             linear-gradient(to bottom, rgba(14,14,16,0.55) 0%, rgba(14,14,16,0.25) 45%, rgba(14,14,16,0.75) 100%);
     }
 
-    /* ─── TOP NAV ────────────────────────────────────────── */
     .top-nav {
         position: relative;
         z-index: 10;
@@ -188,7 +198,6 @@ $is_new        = $_SESSION['login_is_new']        ?? false;
     .nav-school  { font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 0.02em; }
     .nav-system  { font-size: 9px; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 1px; }
 
-    /* ─── PAGE WRAPPER ───────────────────────────────────── */
     .page {
         position: relative;
         z-index: 1;
@@ -200,7 +209,6 @@ $is_new        = $_SESSION['login_is_new']        ?? false;
         padding: 48px 16px 64px;
     }
 
-    /* ─── SHIELD ICON ────────────────────────────────────── */
     .shield-icon {
         font-size: 38px;
         color: var(--text);
@@ -213,7 +221,6 @@ $is_new        = $_SESSION['login_is_new']        ?? false;
         50%       { transform: translateY(-5px); }
     }
 
-    /* ─── HEADING ────────────────────────────────────────── */
     .page-title {
         font-family: 'Barlow Condensed', sans-serif;
         font-size: 42px;
@@ -234,7 +241,6 @@ $is_new        = $_SESSION['login_is_new']        ?? false;
         margin-bottom: 30px;
     }
 
-    /* ─── STEP INDICATORS ────────────────────────────────── */
     .steps {
         display: flex;
         align-items: center;
@@ -272,7 +278,6 @@ $is_new        = $_SESSION['login_is_new']        ?? false;
     }
     .step-line.done { background: rgba(224,26,34,0.35); }
 
-    /* ─── ALERT ──────────────────────────────────────────── */
     .alert {
         display: flex; align-items: flex-start; gap: 10px;
         background: rgba(224,26,34,0.07);
@@ -289,19 +294,17 @@ $is_new        = $_SESSION['login_is_new']        ?? false;
     }
     .alert i { margin-top: 1px; flex-shrink: 0; }
 
-    /* ─── CARD ───────────────────────────────────────────── */
     .card {
         background: var(--card-bg);
         backdrop-filter: blur(22px);
         border: 1px solid var(--border);
-        border-radius: 12px;              /* sharp corner, reference-image style */
+        border-radius: 12px;              
         padding: 32px 30px 28px;
         width: 100%;
         max-width: 420px;
         position: relative;
     }
 
-    /* thin top accent line */
     .card::before {
         content: '';
         position: absolute;
@@ -311,7 +314,6 @@ $is_new        = $_SESSION['login_is_new']        ?? false;
         border-radius: 18px 18px 0 0;
     }
 
-    /* ─── FIELD LABEL ────────────────────────────────────── */
     .field-label {
         font-size: 9px;
         font-weight: 700;
@@ -325,7 +327,6 @@ $is_new        = $_SESSION['login_is_new']        ?? false;
     }
     .field-label .req { color: var(--accent); }
 
-    /* ─── ID FORMAT HINT ─────────────────────────────────── */
     .id-hint {
         font-size: 10px;
         color: var(--muted);
@@ -334,7 +335,6 @@ $is_new        = $_SESSION['login_is_new']        ?? false;
     }
     .id-hint strong { color: rgba(255,255,255,0.72); letter-spacing: 0.03em; }
 
-    /* ─── SEGMENTED ID INPUT ─────────────────────────────── */
     .seg-row {
         display: flex;
         align-items: center;
@@ -378,7 +378,6 @@ $is_new        = $_SESSION['login_is_new']        ?? false;
         user-select: none;
     }
 
-    /* ─── PASSWORD INPUT ─────────────────────────────────── */
     .field-group { margin-bottom: 16px; }
 
     .pw-wrap { position: relative; }
@@ -410,7 +409,6 @@ $is_new        = $_SESSION['login_is_new']        ?? false;
     }
     .pw-toggle:hover { color: rgba(255, 255, 255, 0.41); }
 
-    /* ─── STUDENT FOUND BANNER ───────────────────────────── */
     .student-found {
         display: flex; align-items: center; gap: 12px;
         background: rgba(255,255,255,0.03);
@@ -442,7 +440,6 @@ $is_new        = $_SESSION['login_is_new']        ?? false;
     }
     .edit-btn:hover { color: var(--text); background: rgba(255,255,255,0.06); }
 
-    /* ─── NEW USER BADGE ─────────────────────────────────── */
     .new-badge {
         display: inline-flex; align-items: center; gap: 6px;
         background: rgba(251,191,36,0.07);
@@ -455,7 +452,6 @@ $is_new        = $_SESSION['login_is_new']        ?? false;
         margin-bottom: 16px;
     }
 
-    /* ─── SUB-LABEL (step hint) ──────────────────────────── */
     .sub-label {
         font-size: 10px;
         letter-spacing: 0.12em;
@@ -464,7 +460,6 @@ $is_new        = $_SESSION['login_is_new']        ?? false;
         margin-bottom: 16px;
     }
 
-    /* ─── MAIN BUTTON ────────────────────────────────────── */
     .btn-main {
         width: 100%;
         padding: 13px;
@@ -489,7 +484,6 @@ $is_new        = $_SESSION['login_is_new']        ?? false;
     }
     .btn-main:active { transform: scale(0.99); }
 
-    /* ─── FOOTER ─────────────────────────────────────────── */
     .page-footer {
         margin-top: 18px;
         font-size: 9px;
@@ -502,10 +496,8 @@ $is_new        = $_SESSION['login_is_new']        ?? false;
 </head>
 <body>
 
-<!-- Background photo layer — see comment above in CSS to set your image -->
 <div class="bg-layer"></div>
 
-<!-- ─── NAV ─────────────────────────────────────────────── -->
 <nav class="top-nav">
     <div class="logo">
         <img src="assets/aclc_logo(1).png" alt="ACLC Logo" style="width:50px;height:px;object-fit:contain;">
@@ -516,7 +508,6 @@ $is_new        = $_SESSION['login_is_new']        ?? false;
     </div>
 </nav>
 
-<!-- ─── PAGE ─────────────────────────────────────────────── -->
 <div class="page">
 
     <div class="logo">
@@ -525,7 +516,6 @@ $is_new        = $_SESSION['login_is_new']        ?? false;
     <h1 class="page-title">Sign in</h1>
     <p class="page-sub">For your protection, please verify your identity.</p>
 
-    <!-- Step indicators -->
     <div class="steps">
         <div class="step-dot <?= $step === 1 ? 'active' : 'done' ?>">
             <?= $step > 1 ? '<i class="fas fa-check" style="font-size:11px"></i>' : '1' ?>
@@ -536,7 +526,6 @@ $is_new        = $_SESSION['login_is_new']        ?? false;
         <div class="step-dot">3</div>
     </div>
 
-    <!-- Alert -->
     <?php if ($error): ?>
     <div class="alert">
         <i class="fas fa-exclamation-circle"></i>
@@ -545,7 +534,6 @@ $is_new        = $_SESSION['login_is_new']        ?? false;
     <?php endif; ?>
 
 
-    <!-- ── STEP 1 ── -->
     <?php if ($step === 1): ?>
     <div class="card">
         <div class="field-label">Student ID <span class="req">*</span></div>
@@ -569,13 +557,13 @@ $is_new        = $_SESSION['login_is_new']        ?? false;
                        maxlength="6" placeholder="MAN121" required
                        value="<?= sanitize($_POST['p4'] ?? '') ?>">
             </div>
+            <div class="g-recaptcha" data-sitekey="6LfLFM8sAAAAAPBmiqEmDzwd_F6iKFcI-vgLsLZV" style="margin-bottom:16px;"></div>
             <button type="submit" class="btn-main">
                 <i class="fas fa-search"></i> Find My Record
             </button>
         </form>
     </div>
 
-    <!-- ── STEP 2 ── -->
     <?php elseif ($step === 2): ?>
     <div class="card">
 
@@ -646,10 +634,10 @@ $is_new        = $_SESSION['login_is_new']        ?? false;
         <p> Safe and secured.</p>
     </div>
 
-</div><!-- /page -->
+</div>
 
 <script>
-/* ── Segmented ID auto-advance ── */
+
 const segs = ['p1','p2','p3','p4'];
 const maxL = [3, 2, 4, 6];
 segs.forEach((id, i) => {
@@ -666,7 +654,6 @@ segs.forEach((id, i) => {
     });
 });
 
-/* ── Password toggles ── */
 function togglePw() {
     const f = document.getElementById('pwField');
     const i = document.getElementById('pwIcon');

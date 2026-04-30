@@ -19,7 +19,7 @@ $stmt = $db->prepare("SELECT m.*, c.club_name, c.description, c.house as club_ho
 $stmt->execute([$student_id]);
 $memberships = $stmt->fetchAll();
 
-// ➕ Calculate stats for overview
+
 $active = array_filter($memberships, fn($m) => $m['status'] === 'approved');
 $pending = array_filter($memberships, fn($m) => $m['status'] === 'pending');
 $rejected = array_filter($memberships, fn($m) => $m['status'] === 'rejected');
@@ -54,7 +54,7 @@ $initials  = strtoupper(substr($student['first_name'],0,1) . substr($student['la
     --text-muted:     #6b6f85;
     --text-faint:     #9294a8;
 }
-/* Override stat icon colors for pending/rejected */
+
 .stat-icon.pending { background:rgba(245,158,11,0.15); color:#fbbf24; border-color:rgba(245,158,11,0.3); }
 .stat-icon.rejected { background:rgba(239,68,68,0.15); color:#f87171; border-color:rgba(239,68,68,0.3); }
 .stat-val.pending { color:#fbbf24; }
@@ -63,7 +63,7 @@ $initials  = strtoupper(substr($student['first_name'],0,1) . substr($student['la
 </head>
 <body>
 <div class="dashboard-wrap">
-<!-- SIDEBAR (unchanged) -->
+
 <aside class="sidebar">
     <div class="sb-brand" style="padding:20px 16px 14px;border-bottom:1px solid var(--border)">
             <div class="logo">
@@ -99,7 +99,7 @@ $initials  = strtoupper(substr($student['first_name'],0,1) . substr($student['la
     </div>
     
     <div class="page-content">
-        <!-- ➕ STATS OVERVIEW (uses CSS classes) -->
+   
         <div class="stats-row">
             <div class="stat-card">
                 <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
@@ -132,7 +132,7 @@ $initials  = strtoupper(substr($student['first_name'],0,1) . substr($student['la
         </div>
 
         <?php if (empty($memberships)): ?>
-        <!-- ➕ ENHANCED EMPTY STATE (uses CSS) -->
+
         <div class="card empty-state">
             <i class="fas fa-id-card"></i>
             <h3 style="margin:0 0 8px;color:var(--text-primary)">No memberships yet</h3>
@@ -149,7 +149,7 @@ $initials  = strtoupper(substr($student['first_name'],0,1) . substr($student['la
             $cardNum = $m['card_number'] ?? 'CARD-' . strtoupper(substr(md5($student_id.$m['club_id']),0,8));
         ?>
         <div class="card">
-            <!-- Header -->
+
             <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
                 <div>
                     <div style="font-size:16px;font-weight:800;color:var(--text-primary)"><?= sanitize($m['club_name']) ?></div>
@@ -157,12 +157,12 @@ $initials  = strtoupper(substr($student['first_name'],0,1) . substr($student['la
                         Applied: <?= date('M d, Y', strtotime($m['applied_at'])) ?>
                     </div>
                 </div>
-                <!-- ✅ Uses CSS class for status badge -->
+
                 <span class="membership-status status-<?= $m['status'] ?>"><?= ucfirst($m['status']) ?></span>
             </div>
 
             <?php if ($m['status'] === 'approved'): ?>
-                <!-- ✅ APPROVED: Digital Card (styled with inline gradient + CSS) -->
+
                 <div style="background:linear-gradient(135deg,<?= $cardColor ?>dd,<?= $cardColor ?>88);color:white;border-radius:12px;padding:20px;margin-bottom:12px;position:relative;overflow:hidden">
                     <div style="position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,0.08)"></div>
                     <div style="font-size:9px;opacity:0.75;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:2px"><?= SCHOOL_NAME ?></div>
@@ -181,7 +181,7 @@ $initials  = strtoupper(substr($student['first_name'],0,1) . substr($student['la
               
 
             <?php elseif ($m['status'] === 'pending'): ?>
-                <!-- ⏳ PENDING: Enhanced with CSS-friendly styling -->
+
                 <div style="background:rgba(215, 244, 86, 0.07);border:1px dashed rgba(245,158,11,0.3);border-radius:12px;padding:16px;text-align:center">
                     <i class="fas fa-hourglass-half" style="font-size:24px;color:#fbbf24;margin-bottom:8px"></i>
                     <div style="font-size:13px;color:#fbbf24;margin-bottom:6px">Application under review</div>
@@ -190,13 +190,13 @@ $initials  = strtoupper(substr($student['first_name'],0,1) . substr($student['la
                     </div>
                     <div style="font-size:10px;opacity:0.7;margin-top:10px;font-style:italic">✨ Card will appear here once approved!</div>
                 </div>
-                <!-- Disabled button (uses CSS) -->
+
                 <button class="btn-join btn-disabled" style="margin-top:8px" disabled>
                     <i class="fas fa-lock"></i> View Card (after approval)
                 </button>
 
             <?php elseif ($m['status'] === 'rejected'): ?>
-                <!-- ❌ REJECTED: Styled with CSS-friendly approach -->
+
                 <div style="background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.2);border-radius:12px;padding:16px">
                     <div style="color:#f87171;font-size:13px;margin-bottom:6px">
                         <i class="fas fa-exclamation-triangle"></i> Application not approved
@@ -205,7 +205,7 @@ $initials  = strtoupper(substr($student['first_name'],0,1) . substr($student['la
                         <div style="font-size:11px;opacity:0.85"><strong>Reason:</strong> <?= sanitize($m['notes']) ?></div>
                     <?php endif; ?>
                 </div>
-                <!-- Reapply button (uses CSS) -->
+
                 <a href="clubs.php?club=<?= $m['club_id'] ?>&reapply=1" class="btn-join" style="margin-top:8px">
                     <i class="fas fa-redo"></i> Reapply
                 </a>
@@ -218,14 +218,14 @@ $initials  = strtoupper(substr($student['first_name'],0,1) . substr($student['la
 </main>
 </div>
 
-<!-- Optional: Simple JS for interactions -->
+
 <script>
-// Basic interactivity (can be expanded later)
+
 document.querySelectorAll('.btn-join:not(.btn-disabled):not([disabled])').forEach(btn => {
     btn.addEventListener('click', function(e) {
         if(!this.onclick) {
             e.preventDefault();
-            // Default fallback if no onclick defined
+            
         }
     });
 });

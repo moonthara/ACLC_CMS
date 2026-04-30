@@ -7,9 +7,9 @@ $db = getDB();
 $adminHouse   = getAdminHouse();
 $isSuperAdmin = isSuperAdmin();
 
-// Search/filter
+
 $search        = trim($_GET['search'] ?? '');
-$house_filter  = $adminHouse ?? ($_GET['house'] ?? ''); // house admins cannot change house filter
+$house_filter  = $adminHouse ?? ($_GET['house'] ?? ''); 
 $course_filter = $_GET['course'] ?? '';
 $page_num      = max(1, (int)($_GET['page'] ?? 1));
 $per_page      = 25;
@@ -18,7 +18,7 @@ $offset        = ($page_num - 1) * $per_page;
 $where  = "WHERE 1=1";
 $params = [];
 
-// House admin: always lock to their house
+
 if ($adminHouse) {
     $where   .= " AND s.house = ?";
     $params[] = $adminHouse;
@@ -119,12 +119,12 @@ $students = $stmt->fetchAll();
     </div>
 
     <div class="admin-page">
-        <!-- Filters -->
+        
         <form method="GET" class="filter-bar">
             <input type="text" name="search" value="<?= sanitize($search) ?>" placeholder="🔍  Search by name or student ID...">
 
             <?php if ($isSuperAdmin): ?>
-            <!-- Super admin can filter by any house -->
+            
             <select name="house">
                 <option value="">All Houses</option>
                 <?php foreach (['AZUL','CAHEL','GIALLIO','ROXXO','VIERRDY'] as $h): ?>
@@ -132,7 +132,7 @@ $students = $stmt->fetchAll();
                 <?php endforeach; ?>
             </select>
             <?php else: ?>
-            <!-- House admin: house is locked, show it as a label only -->
+            
             <span style="padding:9px 16px;background:<?= getHouseColor($adminHouse) ?>;color:#fff;border-radius:8px;font-size:13px;font-weight:700">
                 <?= sanitize($adminHouse) ?> HOUSE
             </span>
@@ -194,7 +194,7 @@ $students = $stmt->fetchAll();
             </div>
         </div>
 
-        <!-- Pagination -->
+        
         <?php if ($total_pages > 1): ?>
         <div class="pagination">
             <?php for ($i = 1; $i <= $total_pages; $i++): ?>

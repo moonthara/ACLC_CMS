@@ -1,9 +1,9 @@
 <?php
 // ACLC Club & Membership System - Database Config
-define('DB_HOST', 'localhost');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_NAME', 'aclc_cms');
+define('DB_HOST', 'sql110.infinityfree.com');
+define('DB_USER', 'if0_41780400');
+define('DB_PASS', 'Hmaningo440');
+define('DB_NAME', 'if0_41780400_aclccms');
 define('SITE_NAME', 'ACLC Club & Membership System');
 define('SCHOOL_NAME', 'ACLC College of Mandaue');
 

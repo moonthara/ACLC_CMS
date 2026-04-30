@@ -10,6 +10,16 @@ if (isset($_SESSION['admin_id'])) {
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // reCAPTCHA check
+    $recaptcha_secret = "6LfLFM8sAAAAAJBp32OchxbzTC-4RRcL2WNy_U-k";
+    $recaptcha_response = $_POST['g-recaptcha-response'] ?? '';
+    $verify = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$recaptcha_secret}&response={$recaptcha_response}");
+    $captcha_result = json_decode($verify);
+
+    if (!$captcha_result->success) {
+        $error = 'Please complete the CAPTCHA verification.';
+    } else {
+
     $username = trim($_POST['username'] ?? '');
     $password = $_POST['password'] ?? '';
     $db       = getDB();
@@ -29,6 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = "Invalid username or password.";
     }
 }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,6 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Admin Login — ACLC Portal</title>
     <link rel="stylesheet" href="../css/admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <style>
         .alert {
             padding: 12px 16px;
@@ -104,6 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <i class="fas fa-lock"></i>
                     <input type="password" name="password" placeholder="Password" required>
                 </div>
+                <div class="g-recaptcha" data-sitekey="6LfLFM8sAAAAAPBmiqEmDzwd_F6iKFcI-vgLsLZV" style="margin-bottom:16px;"></div>
                 <button type="submit" class="btn-admin-login">
                     <i class="fas fa-arrow-right-to-bracket"></i> Sign In to Admin Panel
                 </button>
