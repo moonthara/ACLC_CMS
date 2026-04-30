@@ -695,10 +695,10 @@ $initials = strtoupper(substr($student['first_name'],0,1) . substr($student['las
     box-shadow: 0 5px 18px rgba(var(--h-rgb), 0.45);
 }
 
-.btn-join.member  { background: rgba(74,222,128,0.1);  color: #4ade80; border: 1px solid rgba(74,222,128,0.2);  cursor: default; }
-.btn-join.pending { background: rgba(251,191,36,0.1);  color: #fbbf24; border: 1px solid rgba(251,191,36,0.2);  cursor: default; }
-.btn-join.locked  { background: transparent; color: var(--text-faint); border: 1px solid var(--border); cursor: not-allowed; }
-.btn-join.full    { background: rgba(255,255,255,0.04); color: var(--text-faint); border: 1px solid var(--border); cursor: not-allowed; }
+.btn-join.member  { background: rgba(74,222,128,0.1);  color: #4ade80; border: 1px solid rgba(74,222,128,0.2);  cursor: default; border-radius: 6px; padding: 8px 16px;}
+.btn-join.pending { background: rgba(251,191,36,0.1);  color: #fbbf24; border: 1px solid rgba(251,191,36,0.2);  cursor: default; border-radius: 6px; padding: 8px 16px;}
+.btn-join.locked  { background: transparent; color: var(--text-faint); border: 1px solid var(--border); cursor: not-allowed; border-radius: 6px; padding: 8px 16px;}
+.btn-join.full    { background: rgba(255,255,255,0.04); color: var(--text-faint); border: 1px solid var(--border); cursor: not-allowed; border-radius: 6px; padding: 8px 16px;}
 .btn-join.reapply { background: rgba(var(--h-rgb), 0.12); color: var(--h-color); border: 1px solid rgba(var(--h-rgb), 0.25); }
 .btn-join.reapply:hover { background: rgba(var(--h-rgb), 0.2); }
 
