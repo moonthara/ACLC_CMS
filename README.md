@@ -189,14 +189,6 @@ Admins log in at `admin/login.php` using their username and password. reCAPTCHA 
 
 ---
 
-## 📌 Notes
-
-- reCAPTCHA keys in `admin/login.php` are configured for the deployed domain. Update them for local or new deployments via [Google reCAPTCHA Console](https://www.google.com/recaptcha/admin).
-- The student portal UI dynamically applies the student's house color as the primary accent throughout all pages.
-- Membership cards are auto-generated with a unique card number upon approval.
-
----
-
 ## 🏫 About
 
 Developed as a capstone/thesis project for **ACLC College of Mandaue**.  
